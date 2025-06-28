@@ -12,13 +12,23 @@ export default function App() {
   ]);
   const [input, setInput] = useState('');
 
-  // Simulerat API-anrop (byt ut mot din riktiga backend)
-  async function sendToAI(userInput) {
-    // Byt ut detta mot din fetch till Render om du vill!
-    return new Promise((resolve) =>
-      setTimeout(() => resolve(`Här är mitt svar på "${userInput}"`), 1000)
-    );
+async function sendToAI(userInput) {
+  try {
+    const response = await fetch('https://vegobot-backend.onrender.com/ask', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ message: userInput }),
+    });
+    const data = await response.json();
+    return data.response;
+  } catch (error) {
+    console.error('Fel vid AI-anrop:', error);
+    return 'Vego-bot slumrade till, försök igen';
   }
+}
+
 
   const handleSend = async () => {
     if (!input.trim()) return;
