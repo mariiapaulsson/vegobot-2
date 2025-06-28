@@ -1,42 +1,68 @@
 import React, { useState } from 'react';
 import Chat from './components/Chat';
-import InputBox from './components/InputBox';
 import './App.css';
 
-function App() {
+export default function App() {
   const [messages, setMessages] = useState([
-    { id: 1, role: 'bot', text: 'Hej! Vad vill du ha hjälp med?' }
+    {
+      _id: 1,
+      text: "Hej! Vad vill du ha hjälp med?",
+      role: "bot"
+    }
   ]);
+  const [input, setInput] = useState('');
 
-  const addMessage = (text) => {
-    setMessages(prev => [...prev, { id: Date.now(), role: 'user', text }]);
+  // Simulerat API-anrop (byt ut mot din riktiga backend)
+  async function sendToAI(userInput) {
+    // Byt ut detta mot din fetch till Render om du vill!
+    return new Promise((resolve) =>
+      setTimeout(() => resolve(`Här är mitt svar på "${userInput}"`), 1000)
+    );
+  }
 
-    fetch('https://vegobot-backend.onrender.com/ask', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message: text })
-    })
-      .then(res => res.json())
-      .then(data => {
-        setMessages(prev => [
-          ...prev,
-          { id: Date.now() + 1, role: 'bot', text: data.response }
-        ]);
-      })
-      .catch(() => {
-        setMessages(prev => [
-          ...prev,
-          { id: Date.now() + 1, role: 'bot', text: 'Serverfel, försök igen.' }
-        ]);
-      });
+  const handleSend = async () => {
+    if (!input.trim()) return;
+
+    const userMsg = {
+      _id: Date.now(),
+      text: input,
+      role: "user"
+    };
+
+    setMessages((prev) => [...prev, userMsg]);
+    setInput('');
+
+    // Hämta AI-svar
+    const botText = await sendToAI(input);
+    const botMsg = {
+      _id: Date.now() + 1,
+      text: botText,
+      role: "bot"
+    };
+
+    setMessages((prev) => [...prev, botMsg]);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    handleSend();
   };
 
   return (
     <div className="app-container">
       <Chat messages={messages} />
-      <InputBox onSend={addMessage} />
+
+      <form onSubmit={handleSubmit} className="input-box">
+        <input
+          type="text"
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          placeholder="Skriv din fråga här..."
+        />
+        <button type="submit">
+          Skicka
+        </button>
+      </form>
     </div>
   );
 }
-
-export default App;
