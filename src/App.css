@@ -1,20 +1,27 @@
+/* App.css */
+
 .app-container {
   display: flex;
   flex-direction: column;
   height: 100vh;
   max-height: 100vh;
-  padding: 0;
   margin: 0;
+  padding: 16px;
   font-family: Arial, sans-serif;
+  background-color: transparent; /* Gör hela bakgrunden genomskinlig */
 }
 
 .chat-window {
   flex: 1;
   overflow-y: auto;
-  padding: 12px;
-  background-color: #f5f5f5;
+  padding: 16px;
+  background-color: rgba(255, 255, 255, 0.85); /* halvgenomskinlig vit */
+  border-radius: 16px; /* rundade hörn */
   display: flex;
   flex-direction: column;
+  box-sizing: border-box;
+  max-height: calc(100vh - 60px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* lite skugga för snyggare effekt */
 }
 
 .input-box {
@@ -22,6 +29,7 @@
   border-top: 1px solid #ccc;
   background-color: #fff;
   padding: 8px;
+  border-radius: 0 0 16px 16px; /* Rundade hörn längst ner */
 }
 
 .input-box input {
@@ -29,7 +37,8 @@
   padding: 10px;
   font-size: 16px;
   border: 1px solid #ccc;
-  border-radius: 4px;
+  border-radius: 20px; /* rundare hörn */
+  outline: none;
 }
 
 .input-box button {
@@ -39,8 +48,9 @@
   border: none;
   background-color: #4CAF50;
   color: white;
-  border-radius: 4px;
+  border-radius: 20px; /* rundare hörn */
   cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 .input-box button:hover {

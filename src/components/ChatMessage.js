@@ -5,13 +5,15 @@ export default function ChatMessage({ message }) {
 
   const style = {
     alignSelf: isUser ? 'flex-end' : 'flex-start',
-    backgroundColor: isUser ? '#ffffff' : '#d2f4d2',
+    backgroundColor: isUser ? '#ffffff' : '#14532d', // Mörkgrön för AI
+    color: isUser ? '#000000' : '#ffffff', // Vit text för AI
     padding: '12px 16px',
     borderRadius: '16px',
     margin: '8px 0',
     maxWidth: '70%',
     fontWeight: isUser ? 'bold' : 'normal',
-    color: isUser ? '#000000' : '#1b4b1b'
+    boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
+    lineHeight: '1.4',
   };
 
   return (
