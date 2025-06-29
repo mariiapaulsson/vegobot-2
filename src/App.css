@@ -13,6 +13,8 @@ html, body, #root {
   font-family: Arial, sans-serif;
   box-sizing: border-box;
   padding: 12px;
+  max-width: 600px;
+  margin: 0 auto;
 }
 
 .chat-window {
@@ -27,15 +29,37 @@ html, body, #root {
   min-height: 0;
 }
 
+/* Bubbla-styling (global för alla meddelanden) */
+.chat-message {
+  align-self: flex-start;
+  background-color: #14532d;
+  color: white;
+  padding: 12px 20px;
+  border-radius: 30px;
+  margin: 6px 0;
+  max-width: 80%;
+  font-size: 16px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  line-height: 1.5;
+  word-wrap: break-word;
+}
+
+.chat-message.user {
+  align-self: flex-end;
+  background-color: #fff;
+  color: #000;
+}
+
+/* Inputfält och knapp */
 .input-box {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 10px;
   padding: 12px;
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.85);
   border-radius: 20px;
-  backdrop-filter: blur(4px);
+  backdrop-filter: blur(6px);
   position: sticky;
   bottom: 0;
   width: 100%;
@@ -57,22 +81,7 @@ html, body, #root {
   border: 1px solid #197d4f;
 }
 
-.input-box button {
-  padding: 12px 20px;
-  background-color: #197d4f;
-  color: #fff;
-  border: none;
-  border-radius: 25px;
-  font-size: 16px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.input-box button:hover {
-  background-color: #145c3a;
-}
-
-
+.input-box button,
 .send-button {
   padding: 12px 20px;
   background-color: #197d4f;
@@ -84,6 +93,36 @@ html, body, #root {
   transition: background-color 0.3s ease;
 }
 
+.input-box button:hover,
 .send-button:hover {
   background-color: #145c3a;
+}
+
+/* RESPONSIV DESIGN */
+@media (max-width: 600px) {
+  .app-container {
+    padding: 8px;
+  }
+
+  .chat-message {
+    max-width: 90%;
+    font-size: 15px;
+    padding: 10px 16px;
+  }
+
+  .input-box {
+    padding: 10px;
+    gap: 8px;
+  }
+
+  .input-box input {
+    padding: 10px 14px;
+    font-size: 15px;
+  }
+
+  .input-box button,
+  .send-button {
+    padding: 10px 16px;
+    font-size: 15px;
+  }
 }
