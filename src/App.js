@@ -6,7 +6,7 @@ export default function App() {
   const [messages, setMessages] = useState([
     {
       _id: 1,
-      text: "Hej! Vad vill du ha hjälp med?",
+      text: "Hej! Skriv din fråga i fältet nedan så hjälper jag dig!",
       role: "bot"
     }
   ]);
