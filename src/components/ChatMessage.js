@@ -4,6 +4,9 @@ import ReactMarkdown from 'react-markdown';
 export default function ChatMessage({ message }) {
   const isUser = message.role === 'user';
 
+  // Ta bort överflödiga tomrader (flera radbrytningar -> en)
+  const cleanedText = message.text.replace(/\n{2,}/g, '\n');
+
   const style = {
     alignSelf: isUser ? 'flex-end' : 'flex-start',
     backgroundColor: isUser ? '#ffffff' : '#14532d',
@@ -31,8 +34,9 @@ export default function ChatMessage({ message }) {
           a: ({node, ...props}) => <a style={{color: '#90ee90'}} target="_blank" rel="noopener noreferrer" {...props} />,
           strong: ({node, ...props}) => <strong style={{fontWeight: 'bold'}} {...props} />,
         }}
+        breaks={true}
       >
-        {message.text}
+        {cleanedText}
       </ReactMarkdown>
     </div>
   );
