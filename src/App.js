@@ -12,38 +12,43 @@ export default function App() {
   ]);
   const [input, setInput] = useState('');
 
-async function sendToAI(userInput) {
-  try {
-    const response = await fetch('https://vegobot-backend.onrender.com/ask', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ message: userInput }),
-    });
-    const data = await response.json();
-    return data.response;
-  } catch (error) {
-    console.error('Fel vid AI-anrop:', error);
-    return 'Vego-bot slumrade till, försök igen';
+  // Skicka hela konversationen till backend
+  async function sendToAI(allMessages) {
+    try {
+      const response = await fetch('https://vegobot-backend.onrender.com/ask', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ messages: allMessages }),
+      });
+      const data = await response.json();
+      return data.response;
+    } catch (error) {
+      console.error('Fel vid AI-anrop:', error);
+      return 'Vego-bot slumrade till, försök igen';
+    }
   }
-}
-
 
   const handleSend = async () => {
     if (!input.trim()) return;
 
+    // Skapa nytt användarmeddelande
     const userMsg = {
       _id: Date.now(),
       text: input,
       role: "user"
     };
 
-    setMessages((prev) => [...prev, userMsg]);
+    // Lägg till i historiken direkt
+    const updatedMessages = [...messages, userMsg];
+    setMessages(updatedMessages);
     setInput('');
 
-    // Hämta AI-svar
-    const botText = await sendToAI(input);
+    // Skicka hela historiken till AI
+    const botText = await sendToAI(updatedMessages);
+
+    // Skapa och lägg till botsvar
     const botMsg = {
       _id: Date.now() + 1,
       text: botText,
