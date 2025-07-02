@@ -2,7 +2,6 @@ html, body, #root {
   height: 100%;
   margin: 0;
   padding: 0;
-  background-color: #f7f5eb;
 }
 
 .app-container {
@@ -10,6 +9,7 @@ html, body, #root {
   flex-direction: column;
   height: 100%;
   max-height: 100%;
+  background-color: transparent;
   font-family: Arial, sans-serif;
   box-sizing: border-box;
   padding: 12px;
@@ -17,7 +17,6 @@ html, body, #root {
   margin: 0 auto;
 }
 
-/* Chat area */
 .chat-window {
   flex: 1 1 auto;
   overflow-y: auto;
@@ -30,18 +29,18 @@ html, body, #root {
   min-height: 0;
 }
 
-/* Chat bubbles */
+/* Chat message bubble styling */
 .chat-message {
   align-self: flex-start;
   background-color: #14532d;
   color: white;
-  padding: 12px 20px;          /* MINDRE padding än förut */
-  border-radius: 25px;         /* Lite tajtare */
-  margin: 6px 12px;            /* Mindre marginaler på sidorna */
+  padding: 14px 20px;
+  border-radius: 30px;
+  margin: 8px 14px;
   max-width: 80%;
   font-size: 16px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-  line-height: 1.35;           /* Tydligare men mindre radavstånd */
+  line-height: 1.4;
   word-wrap: break-word;
 }
 
@@ -51,51 +50,45 @@ html, body, #root {
   color: #000;
 }
 
-/* MARKDOWN STYLING */
+/* Markdown inside bubbles */
 .markdown-content h1,
 .markdown-content h2,
 .markdown-content h3,
 .markdown-content h4,
 .markdown-content h5,
 .markdown-content h6 {
-  margin: 4px 0;
-  font-size: 1.05em;           /* Mindre rubriker */
+  margin: 2px 0;
+  font-size: 1.05em;
   font-weight: bold;
-  line-height: 1.3;
+  line-height: 1.25;
 }
 
 .markdown-content p {
-  margin: 3px 0;
-  line-height: 1.35;           /* Lite tätare */
+  margin: 2px 0;
+  line-height: 1.3;
 }
 
 .markdown-content ul,
 .markdown-content ol {
-  margin: 4px 0 4px 20px;
+  margin: 2px 0 2px 20px;
   padding: 0;
 }
 
 .markdown-content li {
-  margin: 2px 0;
+  margin: 1px 0;
   padding: 0;
-  line-height: 1.35;
+  line-height: 1.3;
 }
 
-.markdown-content a {
-  color: #90ee90;
-  text-decoration: underline;
-  word-break: break-all;
-}
-
-/* Input box */
+/* Input area styling */
 .input-box {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 10px;
-  padding: 10px;
-  background: rgba(255, 255, 255, 0.9);
-  border-radius: 22px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 20px;
   backdrop-filter: blur(6px);
   position: sticky;
   bottom: 0;
@@ -142,14 +135,14 @@ html, body, #root {
   }
 
   .chat-message {
-    max-width: 70%;
+    max-width: 65%;
     font-size: 15px;
-    padding: 10px 16px;
+    padding: 12px 18px;
     margin: 6px 10px;
   }
 
   .input-box {
-    padding: 8px;
+    padding: 10px;
     gap: 8px;
   }
 
@@ -162,5 +155,20 @@ html, body, #root {
   .send-button {
     padding: 10px 16px;
     font-size: 15px;
+  }
+
+  .markdown-content h1,
+  .markdown-content h2,
+  .markdown-content h3,
+  .markdown-content h4,
+  .markdown-content h5,
+  .markdown-content h6 {
+    font-size: 1em;
+  }
+
+  .markdown-content p,
+  .markdown-content li {
+    font-size: 15px;
+    line-height: 1.3;
   }
 }
