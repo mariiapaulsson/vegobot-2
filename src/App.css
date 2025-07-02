@@ -137,10 +137,10 @@ html, body, #root {
 
 /* RESPONSIVE DESIGN */
 @media (max-width: 600px) {
-  .app-container {
-    padding: 8px;
-    max-width: 95%;
-  }
+.app-container {
+  max-height: 80vh;
+  overflow: hidden;
+}
 
   .chat-window {
     padding: 10px 6px;
