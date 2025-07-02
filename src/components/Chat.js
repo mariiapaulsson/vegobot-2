@@ -4,6 +4,8 @@ import ChatMessage from './ChatMessage';
 export default function Chat({ messages = [] }) {
   const bottomRef = useRef(null);
 
+  const isFirstRender = useRef(true);
+
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
