@@ -7,20 +7,23 @@ export default function App() {
     {
       _id: 1,
       text: "Hej! Skriv din fråga i fältet nedan så hjälper jag dig!",
-      role: "bot"
+      role: "assistant"
     }
   ]);
   const [input, setInput] = useState('');
 
-  // Skicka hela konversationen till backend
-  async function sendToAI(allMessages) {
+  // Skicka hela historiken till backend
+  async function sendToAI(userInput, history) {
     try {
       const response = await fetch('https://vegobot-backend.onrender.com/ask', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ messages: allMessages }),
+        body: JSON.stringify({
+          message: userInput,
+          history: history
+        }),
       });
       const data = await response.json();
       return data.response;
@@ -33,26 +36,23 @@ export default function App() {
   const handleSend = async () => {
     if (!input.trim()) return;
 
-    // Skapa nytt användarmeddelande
     const userMsg = {
       _id: Date.now(),
       text: input,
       role: "user"
     };
 
-    // Lägg till i historiken direkt
-    const updatedMessages = [...messages, userMsg];
-    setMessages(updatedMessages);
+    const updatedHistory = [...messages, userMsg];
+    setMessages(updatedHistory);
     setInput('');
 
-    // Skicka hela historiken till AI
-    const botText = await sendToAI(updatedMessages);
+    // Skicka med hela historiken
+    const botText = await sendToAI(input, updatedHistory);
 
-    // Skapa och lägg till botsvar
     const botMsg = {
       _id: Date.now() + 1,
       text: botText,
-      role: "bot"
+      role: "assistant"
     };
 
     setMessages((prev) => [...prev, botMsg]);

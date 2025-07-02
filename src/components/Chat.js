@@ -11,11 +11,7 @@ export default function Chat({ messages = [] }) {
   return (
     <div className="chat-window">
       {messages.map((msg) => (
-        <ChatMessage
-          key={msg._id}
-          text={msg.text}
-          role={msg.role}
-        />
+        <ChatMessage key={msg._id} message={msg} />
       ))}
       <div ref={bottomRef} />
     </div>
