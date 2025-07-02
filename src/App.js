@@ -7,7 +7,7 @@ export default function App() {
     {
       _id: 1,
       text: "Hej! Skriv din fråga i fältet nedan så hjälper jag dig!",
-      role: "bot"
+      role: "assistant"
     }
   ]);
   const [input, setInput] = useState('');
@@ -16,10 +16,8 @@ export default function App() {
     try {
       const response = await fetch('https://vegobot-backend.onrender.com/ask', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ conversation }),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messages: conversation })
       });
       const data = await response.json();
       return data.response;
@@ -42,15 +40,14 @@ export default function App() {
     setMessages(updatedMessages);
     setInput('');
 
-    // Hämta AI-svar baserat på hela konversationen
     const botText = await sendToAI(updatedMessages);
     const botMsg = {
       _id: Date.now() + 1,
       text: botText,
-      role: "bot"
+      role: "assistant"
     };
 
-    setMessages((prev) => [...prev, botMsg]);
+    setMessages(prev => [...prev, botMsg]);
   };
 
   const handleSubmit = (e) => {
