@@ -4,8 +4,17 @@ import ReactMarkdown from 'react-markdown';
 export default function ChatMessage({ message }) {
   const isUser = message.role === 'user';
 
-  // Ta bort överflödiga tomrader (flera radbrytningar -> en)
-  const cleanedText = message.text.replace(/\n{2,}/g, '\n');
+  // 👇 Avlägsna överflödiga tomrader
+  const cleanedText = message.text
+    .split('\n')
+    .reduce((acc, line) => {
+      if (line.trim() === '' && acc[acc.length - 1] === '') {
+        return acc;
+      }
+      return [...acc, line.trim()];
+    }, [])
+    .join('\n')
+    .trim();
 
   const style = {
     alignSelf: isUser ? 'flex-end' : 'flex-start',
@@ -17,7 +26,7 @@ export default function ChatMessage({ message }) {
     maxWidth: '80%',
     fontWeight: isUser ? 'bold' : 'normal',
     boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
-    lineHeight: '1.5',
+    lineHeight: '1.4',
     whiteSpace: 'pre-wrap',
     wordBreak: 'break-word',
     fontSize: '16px'
@@ -27,10 +36,10 @@ export default function ChatMessage({ message }) {
     <div style={style}>
       <ReactMarkdown
         components={{
-          h1: ({node, ...props}) => <h2 style={{fontSize: '18px', marginBottom: '6px'}} {...props} />,
-          h2: ({node, ...props}) => <h3 style={{fontSize: '16px', marginBottom: '6px'}} {...props} />,
-          li: ({node, ...props}) => <li style={{marginBottom: '4px'}} {...props} />,
-          p: ({node, ...props}) => <p style={{margin: '6px 0'}} {...props} />,
+          h1: ({node, ...props}) => <h2 style={{fontSize: '18px', margin: '4px 0'}} {...props} />,
+          h2: ({node, ...props}) => <h3 style={{fontSize: '16px', margin: '4px 0'}} {...props} />,
+          li: ({node, ...props}) => <li style={{margin: '2px 0'}} {...props} />,
+          p: ({node, ...props}) => <p style={{margin: '4px 0'}} {...props} />,
           a: ({node, ...props}) => <a style={{color: '#90ee90'}} target="_blank" rel="noopener noreferrer" {...props} />,
           strong: ({node, ...props}) => <strong style={{fontWeight: 'bold'}} {...props} />,
         }}
