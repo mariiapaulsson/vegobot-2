@@ -4,17 +4,12 @@ import ReactMarkdown from 'react-markdown';
 export default function ChatMessage({ message }) {
   const isUser = message.role === 'user';
 
-  // 👇 Avlägsna överflödiga tomrader
+  // Ta bort överflödiga tomrader och whitespace
   const cleanedText = message.text
     .split('\n')
-    .reduce((acc, line) => {
-      if (line.trim() === '' && acc[acc.length - 1] === '') {
-        return acc;
-      }
-      return [...acc, line.trim()];
-    }, [])
-    .join('\n')
-    .trim();
+    .map(line => line.trim())
+    .filter((line, i, arr) => line !== '' || arr[i - 1] !== '')
+    .join('\n');
 
   const style = {
     alignSelf: isUser ? 'flex-end' : 'flex-start',
@@ -26,22 +21,45 @@ export default function ChatMessage({ message }) {
     maxWidth: '80%',
     fontWeight: isUser ? 'bold' : 'normal',
     boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
-    lineHeight: '1.4',
+    lineHeight: '1.5',
     whiteSpace: 'pre-wrap',
     wordBreak: 'break-word',
     fontSize: '16px'
   };
 
+  // Snygga rubriker utan tomma taggar
+  const Heading = ({ level, children }) =>
+    children && children.length > 0 ? (
+      React.createElement(
+        `h${level}`,
+        { style: { fontSize: `${20 - level}px`, marginBottom: '6px' } },
+        children
+      )
+    ) : null;
+
   return (
     <div style={style}>
       <ReactMarkdown
         components={{
-          h1: ({node, ...props}) => <h2 style={{fontSize: '18px', margin: '4px 0'}} {...props} />,
-          h2: ({node, ...props}) => <h3 style={{fontSize: '16px', margin: '4px 0'}} {...props} />,
-          li: ({node, ...props}) => <li style={{margin: '2px 0'}} {...props} />,
-          p: ({node, ...props}) => <p style={{margin: '4px 0'}} {...props} />,
-          a: ({node, ...props}) => <a style={{color: '#90ee90'}} target="_blank" rel="noopener noreferrer" {...props} />,
-          strong: ({node, ...props}) => <strong style={{fontWeight: 'bold'}} {...props} />,
+          h1: (props) => <Heading level={1} {...props} />,
+          h2: (props) => <Heading level={2} {...props} />,
+          h3: (props) => <Heading level={3} {...props} />,
+          li: ({ node, ...props }) => <li style={{ marginBottom: '4px' }} {...props} />,
+          p: ({ node, ...props }) => <p style={{ margin: '6px 0' }} {...props} />,
+          a: ({ node, children, ...props }) => {
+            const linkText = children && children.length > 0 ? children : props.href;
+            return (
+              <a
+                style={{ color: '#90ee90' }}
+                target="_blank"
+                rel="noopener noreferrer"
+                {...props}
+              >
+                {linkText}
+              </a>
+            );
+          },
+          strong: ({ node, ...props }) => <strong style={{ fontWeight: 'bold' }} {...props} />,
         }}
         breaks={true}
       >
