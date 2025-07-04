@@ -50,26 +50,27 @@ export default function App() {
     setMessages(prev => [...prev, botMsg]);
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    handleSend();
-  };
-
   return (
     <div className="app-container">
       <Chat messages={messages} />
 
-      <form onSubmit={handleSubmit} className="input-box">
+      <div className="input-box">
         <input
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              e.preventDefault();
+              handleSend();
+            }
+          }}
           placeholder="Skriv din fråga här..."
         />
-        <button type="submit">
+        <button onClick={handleSend}>
           Skicka
         </button>
-      </form>
+      </div>
     </div>
   );
 }
