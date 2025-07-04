@@ -14,20 +14,20 @@ export default function ChatMessage({ message }) {
     alignSelf: isUser ? 'flex-end' : 'flex-start',
     backgroundColor: isUser ? '#ffffff' : '#14532d',
     color: isUser ? '#000000' : '#ffffff',
-    padding: '10px 20px',
+    padding: '10px 16px',
     borderRadius: '25px',
-    margin: '6px 0',
+    margin: '6px 12px',
     maxWidth: '80%',
     fontWeight: isUser ? 'bold' : 'normal',
-    boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
-    lineHeight: '1.5',
-    wordBreak: 'break-word',
-    fontSize: '16px'
+    boxShadow: '0 2px 4px rgba(0,0,0,0.15)',
+    lineHeight: '1.4',
+    wordWrap: 'break-word',
+    fontSize: '15px'
   };
 
   return (
     <div style={style} className="chat-message">
-      <ReactMarkdown>
+      <ReactMarkdown className="markdown-content">
         {cleanedText}
       </ReactMarkdown>
     </div>
