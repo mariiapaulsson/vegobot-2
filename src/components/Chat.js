@@ -3,23 +3,17 @@ import ChatMessage from './ChatMessage';
 
 export default function Chat({ messages = [] }) {
   const bottomRef = useRef(null);
-  const isFirstRender = useRef(true);
-  const lastMessageCount = useRef(messages.length);
+  const prevLength = useRef(0);
 
   useEffect(() => {
-    if (isFirstRender.current) {
-      // Första render – ingen scroll
-      isFirstRender.current = false;
-      lastMessageCount.current = messages.length;
-      return;
+    // Scrolla enbart när AI har svarat
+    if (messages.length > prevLength.current) {
+      const last = messages[messages.length - 1];
+      if (last && last.role === 'assistant') {
+        bottomRef.current?.scrollIntoView({ behavior: 'auto' });
+      }
     }
-
-    if (messages.length > lastMessageCount.current) {
-      // Scrolla bara om vi fått fler meddelanden
-      bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
-    }
-
-    lastMessageCount.current = messages.length;
+    prevLength.current = messages.length;
   }, [messages]);
 
   return (
