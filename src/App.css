@@ -138,31 +138,35 @@ html, body, #root {
 /* RESPONSIVE DESIGN */
 @media (max-width: 600px) {
   .app-container {
-    padding: 8px;
-    max-width: 100%;       /* ⚡️ Hindra hård bredd på mobil */
+    padding: 6px;
+    max-width: 100%;
   }
 
   .chat-message {
-    max-width: 70%;
-    font-size: 13px;
-    padding: 8px 12px;
-    margin: 6px 10px;
+    max-width: 80%;
+    font-size: 12px;
+    padding: 6px 10px;
+    margin: 5px 8px;
+    border-radius: 20px;
+    line-height: 1.3;
   }
 
   .input-box {
-    padding: 8px;
-    gap: 8px;
+    padding: 6px;
+    gap: 6px;
   }
 
   .input-box input {
-    padding: 8px 12px;
-    font-size: 13px;
+    padding: 6px 10px;
+    font-size: 12px;
+    border-radius: 20px;
   }
 
   .input-box button,
   .send-button {
-    padding: 8px 12px;
-    font-size: 13px;
+    padding: 6px 10px;
+    font-size: 12px;
+    border-radius: 20px;
   }
 
   .markdown-content h1,
@@ -171,12 +175,15 @@ html, body, #root {
   .markdown-content h4,
   .markdown-content h5,
   .markdown-content h6 {
-    font-size: 0.95em;
+    font-size: 0.9em;
+    line-height: 1.2;
+    margin: 2px 0;
   }
 
   .markdown-content p,
   .markdown-content li {
-    font-size: 13px;
-    line-height: 1.3;
+    font-size: 12px;
+    line-height: 1.25;
+    margin: 1px 0;
   }
 }
