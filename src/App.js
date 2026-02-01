@@ -1,253 +1,148 @@
-html, body, #root {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-}
+import React, { useEffect, useRef, useState } from "react";
+import Chat from "./components/Chat";
+import "./App.css";
 
+export default function App() {
+  const [messages, setMessages] = useState([
+    {
+      _id: 1,
+      text: "Hej! Skriv din fråga i fältet nedan så hjälper jag dig!",
+      role: "assistant",
+    },
+  ]);
 
-/* ===============================
-   APP CONTAINER
-================================= */
+  const [input, setInput] = useState("");
+  const [isSending, setIsSending] = useState(false);
+  const inputRef = useRef(null);
 
-.app-container {
-  background: transparent;
-  font-family: Arial, sans-serif;
-  box-sizing: border-box;
-  padding: 16px;
-}
+  const isStart = messages.length <= 1;
 
+  const suggestions = [
+    "🥦 Ge mig ett snabbt middagstips",
+    "⏱ Vad kan jag laga på 15 minuter?",
+    "💸 Billig vegetarisk veckomat",
+    "🔥 Imponera på gäster – vad ska jag laga?",
+  ];
 
-/* ===============================
-   CHAT CARD (chat + input ihop)
-================================= */
+  useEffect(() => {
+    if (!isSending && inputRef.current) inputRef.current.focus();
+  }, [isSending]);
 
-.chat-card {
-  background: #ffffff;
-  border-radius: 22px;
-  padding: 18px;
+  async function sendToAI(conversation) {
+    try {
+      const response = await fetch("https://vegobot-backend.onrender.com/ask", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ messages: conversation }),
+      });
 
-  display: flex;
-  flex-direction: column;
-
-  box-shadow:
-    0 12px 30px rgba(0,0,0,0.05),
-    0 4px 10px rgba(0,0,0,0.03);
-}
-
-
-/* ⭐ STARTLÄGE */
-.chat-card.chat-start {
-  min-height: 420px;   /* justera 360–520 efter smak */
-  justify-content: space-between;
-}
-
-
-/* ===============================
-   CHAT WINDOW
-================================= */
-
-.chat-window {
-  overflow-y: auto;
-  min-height: 0;
-
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-}
-
-/* startläge -> bubblan uppe */
-.chat-card.chat-start .chat-window {
-  justify-content: flex-start;
-}
-
-
-/* ===============================
-   CHAT BUBBLES
-================================= */
-
-.chat-message {
-  align-self: flex-start;
-  background-color: #14532d;
-  color: #fff;
-
-  padding: 11px 16px;
-  border-radius: 22px;
-  margin: 6px 8px;
-
-  max-width: 78%;
-  font-size: 15px;
-  line-height: 1.45;
-
-  word-wrap: break-word;
-
-  box-shadow: 0 4px 10px rgba(0,0,0,0.10);
-}
-
-.chat-message.user {
-  align-self: flex-end;
-  background-color: #EAF6EF;
-  color: #0f172a;
-}
-
-
-/* ===============================
-   MARKDOWN
-================================= */
-
-.markdown-content h1,
-.markdown-content h2,
-.markdown-content h3,
-.markdown-content h4,
-.markdown-content h5,
-.markdown-content h6 {
-  margin: 2px 0;
-  font-size: 1.05em;
-  font-weight: bold;
-  line-height: 1.25;
-}
-
-.markdown-content p {
-  margin: 3px 0;
-  line-height: 1.4;
-}
-
-.markdown-content ul,
-.markdown-content ol {
-  margin: 4px 0 4px 18px;
-  padding: 0;
-}
-
-.markdown-content li {
-  margin: 2px 0;
-  line-height: 1.3;
-}
-
-.markdown-content p:empty {
-  margin: 0;
-  padding: 0;
-}
-
-
-/* ===============================
-   INPUT AREA
-================================= */
-
-.input-box {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-
-  padding: 10px;
-
-  background: rgba(255,255,255,0.94);
-  border-radius: 26px;
-
-  backdrop-filter: blur(10px);
-
-  box-sizing: border-box;
-
-  box-shadow: 0 -2px 10px rgba(0,0,0,0.03);
-}
-
-.input-box textarea {
-  flex: 1;
-
-  padding: 12px 16px;
-
-  border: 1px solid #d1d5db;
-  border-radius: 22px;
-
-  font-size: 15px;
-  outline: none;
-
-  background-color: #fff;
-
-  resize: none;
-  line-height: 1.45;
-  max-height: 140px;
-  overflow-y: auto;
-
-  transition: border 0.2s ease,
-              box-shadow 0.2s ease;
-}
-
-.input-box textarea:focus {
-  border: 1px solid #197d4f;
-
-  box-shadow:
-    0 0 0 3px rgba(25,125,79,0.08);
-}
-
-
-/* BUTTON */
-
-.input-box button {
-  padding: 10px 18px;
-
-  background-color: #197d4f;
-  color: #fff;
-
-  border: none;
-  border-radius: 22px;
-
-  font-size: 15px;
-  cursor: pointer;
-
-  transition: all 0.22s ease;
-}
-
-.input-box button:hover {
-  background-color: #145c3a;
-  transform: translateY(-1px);
-}
-
-.input-box button:disabled {
-  background-color: #9ca3af;
-  cursor: not-allowed;
-  transform: none;
-}
-
-
-/* ===============================
-   MOBILE
-================================= */
-
-@media (max-width: 480px) {
-
-  .app-container {
-    padding: 10px;
+      const data = await response.json();
+      return data.response;
+    } catch (error) {
+      console.error("Fel vid AI-anrop:", error);
+      return "Vego-bot slumrade till, försök igen";
+    }
   }
 
-  .chat-card {
-    padding: 12px;
-    border-radius: 18px;
-  }
+  const handleSend = async (overrideText) => {
+    const textToSend = typeof overrideText === "string" ? overrideText : input;
+    const trimmed = textToSend.trim();
+    if (!trimmed || isSending) return;
 
-  .chat-card.chat-start {
-    min-height: 360px;
-  }
+    setIsSending(true);
 
-  .chat-message {
-    max-width: 86%;
-    font-size: 13px;
-    padding: 8px 12px;
-    border-radius: 18px;
-  }
+    const now = Date.now();
 
-  .input-box {
-    padding: 6px;
-    gap: 6px;
-  }
+    const userMsg = {
+      _id: now,
+      text: trimmed,
+      role: "user",
+    };
 
-  .input-box textarea {
-    padding: 8px 10px;
-    font-size: 13px;
-    border-radius: 18px;
-  }
+    const thinkingId = now + 1;
+    const thinkingMsg = {
+      _id: thinkingId,
+      text: "Ett ögonblick — något gott är på gång!",
+      role: "assistant",
+    };
 
-  .input-box button {
-    padding: 8px 12px;
-    font-size: 13px;
-    border-radius: 18px;
-  }
+    // Viktigt: skicka INTE thinkingMsg till AI
+    const conversation = [...messages, userMsg];
+
+    // Visa direkt i chatten
+    setMessages((prev) => [...prev, userMsg, thinkingMsg]);
+    setInput("");
+
+    const botText = await sendToAI(conversation);
+
+    // Ersätt thinking med riktigt svar
+    setMessages((prev) =>
+      prev.map((m) => (m._id === thinkingId ? { ...m, text: botText } : m))
+    );
+
+    setIsSending(false);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    handleSend();
+  };
+
+  // Enter skickar, Shift+Enter ny rad
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleSend();
+    }
+  };
+
+  const handleSuggestionClick = (text) => {
+    // Fyll input + skicka direkt
+    setInput(text);
+    // Låt state hinna uppdatera innan vi skickar
+    setTimeout(() => handleSend(text), 0);
+  };
+
+  return (
+    <div className="app-container">
+      <div className={`chat-card ${isStart ? "chat-start" : ""}`}>
+        <Chat messages={messages} />
+
+        {isStart && (
+          <div className="suggestions">
+            {suggestions.map((s) => (
+              <button
+                key={s}
+                type="button"
+                className="suggestion-chip"
+                onClick={() => handleSuggestionClick(s)}
+                disabled={isSending}
+              >
+                {s}
+              </button>
+            ))}
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit} className="input-box">
+          <textarea
+            ref={inputRef}
+            rows={1}
+            inputMode="text"
+            autoComplete="off"
+            autoCorrect="off"
+            spellCheck="false"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={handleKeyDown}
+            placeholder="Skriv din fråga här..."
+          />
+
+          <button type="submit" disabled={isSending}>
+            {isSending ? "Tillagar..." : "Skicka"}
+          </button>
+        </form>
+      </div>
+    </div>
+  );
 }
