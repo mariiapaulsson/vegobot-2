@@ -49,7 +49,7 @@ html, body, #root {
   color: white;
   padding: 10px 16px;
   border-radius: 22px;
-  margin: 4px 8px;
+  margin: 6px 8px;
   max-width: 78%;
   font-size: 15px;
   box-shadow: 0 3px 6px rgba(0,0,0,0.12);
@@ -105,8 +105,9 @@ html, body, #root {
   align-items: center;
   gap: 10px;
   padding: 10px;
-  margin-top: 10px;
-
+  margin-top: auto;   /* 🔥 trycker ner input till botten */
+  margin-bottom: 0;   /* ingen extra luft */
+  
   background: rgba(255, 255, 255, 0.9);
   border-radius: 24px;
   backdrop-filter: blur(8px);
