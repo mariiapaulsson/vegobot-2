@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Chat from './components/Chat';
 import './App.css';
 
@@ -12,7 +12,16 @@ export default function App() {
   ]);
 
   const [input, setInput] = useState('');
-  const [isSending, setIsSending] = useState(false); // stoppar dubbelskick
+  const [isSending, setIsSending] = useState(false);
+
+  // Fokus tillbaka i rutan efter svar
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    if (!isSending && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [isSending]);
 
   async function sendToAI(conversation) {
     try {
@@ -24,7 +33,6 @@ export default function App() {
 
       const data = await response.json();
       return data.response;
-
     } catch (error) {
       console.error('Fel vid AI-anrop:', error);
       return 'Vego-bot slumrade till, försök igen';
@@ -32,72 +40,31 @@ export default function App() {
   }
 
   const handleSend = async () => {
-    if (!input.trim() || isSending) return;
+    const trimmed = input.trim();
+    if (!trimmed || isSending) return;
 
     setIsSending(true);
 
+    const now = Date.now();
+
     // User message
     const userMsg = {
-      _id: Date.now(),
-      text: input,
+      _id: now,
+      text: trimmed,
       role: "user"
     };
 
-    // Thinking message
-    const thinkingId = Date.now() + 1;
+    // Thinking message (visas direkt)
+    const thinkingId = now + 1;
     const thinkingMsg = {
       _id: thinkingId,
       text: "Ett ögonblick — något gott är på gång!",
       role: "assistant"
     };
 
-    // Viktigt: thinking ska INTE skickas till AI
+    // Viktigt: skicka INTE thinking till AI
     const conversation = [...messages, userMsg];
 
     // Visa direkt i chatten
-    setMessages(prev => [...prev, userMsg, thinkingMsg]);
-    setInput('');
+    setMessages(prev => [...prev, userMsg,]()
 
-    // Hämta AI-svar
-    const botText = await sendToAI(conversation);
-
-    // Ersätt thinking-raden med riktiga svaret
-    setMessages(prev =>
-      prev.map(msg =>
-        msg._id === thinkingId
-          ? { ...msg, text: botText }
-          : msg
-      )
-    );
-
-    setIsSending(false);
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    handleSend();
-  };
-
-  return (
-    <div className="app-container">
-      <Chat messages={messages} />
-
-      <form onSubmit={handleSubmit} className="input-box">
-        <input
-          type="text"
-          inputMode="text"
-          autoComplete="off"
-          autoCorrect="off"
-          spellCheck="false"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          placeholder="Skriv din fråga här..."
-        />
-
-        <button type="submit" disabled={isSending}>
-          {isSending ? "Tillagar..." : "Skicka"}
-        </button>
-      </form>
-    </div>
-  );
-}
