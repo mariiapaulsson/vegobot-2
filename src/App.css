@@ -4,22 +4,25 @@ html, body, #root {
   padding: 0;
 }
 
+/* APP CONTAINER — låt WordPress styra storleken */
 .app-container {
   display: flex;
   flex-direction: column;
   height: 100%;
-  max-height: 80vh;
   overflow: hidden;
   background-color: transparent;
   font-family: Arial, sans-serif;
   box-sizing: border-box;
-  padding: 12px;
-  max-width: 540px;
-  margin: 0 auto;
+  padding: 16px;
+
+  max-width: none;
+  max-height: none;
+  margin: 0;
 }
 
+/* CHAT WINDOW */
 .chat-window {
-  flex: 1 1 auto;
+  flex: 1;
   overflow-y: auto;
   padding: 12px;
   background-color: transparent;
@@ -28,26 +31,28 @@ html, body, #root {
   flex-direction: column;
   box-sizing: border-box;
   min-height: 0;
+
+  gap: 6px; /* 🔥 modern spacing mellan bubblor */
 }
 
-/* Chat bubbles */
+/* CHAT BUBBLES */
 .chat-message {
   align-self: flex-start;
   background-color: #14532d;
   color: white;
   padding: 10px 16px;
-  border-radius: 25px;
-  margin: 6px 12px;
-  max-width: 80%;
+  border-radius: 22px;
+  margin: 4px 8px;
+  max-width: 78%;
   font-size: 15px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+  box-shadow: 0 3px 6px rgba(0,0,0,0.12);
   line-height: 1.4;
   word-wrap: break-word;
 }
 
 .chat-message.user {
   align-self: flex-end;
-  background-color: #fff;
+  background-color: #ffffff;
   color: #000;
 }
 
@@ -71,16 +76,16 @@ html, body, #root {
 
 .markdown-content ul,
 .markdown-content ol {
-  margin: 2px 0 2px 18px;
+  margin: 4px 0 4px 18px;
   padding: 0;
 }
 
 .markdown-content li {
-  margin: 1px 0;
-  padding: 0;
+  margin: 2px 0;
   line-height: 1.3;
 }
 
+/* ta bort tomma p-taggar */
 .markdown-content p:empty {
   margin: 0;
   padding: 0;
@@ -90,31 +95,30 @@ html, body, #root {
 .input-box {
   display: flex;
   align-items: center;
-  justify-content: center;
   gap: 10px;
   padding: 10px;
-  background: rgba(255, 255, 255, 0.85);
-  border-radius: 20px;
-  backdrop-filter: blur(6px);
-  position: sticky;
-  bottom: 0;
-  width: 100%;
+  margin-top: 8px;
+
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 24px;
+  backdrop-filter: blur(8px);
+
   box-sizing: border-box;
 }
 
-/* 🔥 TEXTAREA istället för input */
+/* TEXTAREA */
 .input-box textarea {
   flex: 1;
-  padding: 10px 16px;
-  border: 1px solid #ccc;
-  border-radius: 25px;
+  padding: 12px 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 22px;
   font-size: 15px;
   outline: none;
   transition: border 0.2s ease;
   background-color: #fff;
 
   resize: none;
-  line-height: 1.35;
+  line-height: 1.4;
   max-height: 120px;
   overflow-y: auto;
 }
@@ -130,36 +134,36 @@ html, body, #root {
   background-color: #197d4f;
   color: #fff;
   border: none;
-  border-radius: 25px;
+  border-radius: 22px;
   font-size: 15px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: all 0.25s ease;
 }
 
 .input-box button:hover,
 .send-button:hover {
   background-color: #145c3a;
+  transform: translateY(-1px);
 }
 
 .input-box button:disabled {
   background-color: #9ca3af;
   cursor: not-allowed;
+  transform: none;
 }
 
 /* MOBILE */
 @media (max-width: 480px) {
+
   .app-container {
-    padding: 6px;
-    max-width: 100%;
+    padding: 8px;
   }
 
   .chat-message {
     max-width: 85%;
-    font-size: 12.5px;
-    padding: 6px 10px;
-    margin: 4px 6px;
-    border-radius: 20px;
-    line-height: 1.3;
+    font-size: 13px;
+    padding: 8px 12px;
+    border-radius: 18px;
   }
 
   .input-box {
@@ -168,34 +172,14 @@ html, body, #root {
   }
 
   .input-box textarea {
-    padding: 6px 10px;
-    font-size: 12px;
-    border-radius: 20px;
+    padding: 8px 10px;
+    font-size: 13px;
+    border-radius: 18px;
   }
 
-  .input-box button,
-  .send-button {
-    padding: 6px 10px;
-    font-size: 12px;
-    border-radius: 20px;
-  }
-
-  .markdown-content h1,
-  .markdown-content h2,
-  .markdown-content h3,
-  .markdown-content h4,
-  .markdown-content h5,
-  .markdown-content h6 {
-    font-size: 0.9em;
-    line-height: 1.2;
-    margin: 2px 0;
-  }
-
-  .markdown-content p,
-  .markdown-content li {
-    font-size: 12.5px;
-    line-height: 1.25;
-    margin: 1px 0;
+  .input-box button {
+    padding: 8px 12px;
+    font-size: 13px;
+    border-radius: 18px;
   }
 }
-
