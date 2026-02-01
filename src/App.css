@@ -13,7 +13,7 @@ html, body, #root {
   display: flex;
   flex-direction: column;
 
-  /* 🔥 SUPERviktigt — ta bort full-height känslan */
+  /* 🔥 ta bort full-height känslan */
   height: auto;
   min-height: unset;
 
@@ -30,8 +30,7 @@ html, body, #root {
 ================================= */
 
 .chat-window {
-
-  /* 🔥 ändrat från flex-grow */
+  /* 🔥 inte flex-grow i iframe-läge */
   flex: none;
 
   overflow-y: auto;
@@ -53,17 +52,14 @@ html, body, #root {
 }
 
 
-/* ⭐ HERO START — detta löser ditt problem */
+/* ⭐ STARTLÄGE: meddelande uppe, tom yta, input längre ner */
 .chat-window.chat-start {
-
-  justify-content: flex-start;
-
-  /* 🔥 stoppa den från att bli gigantisk */
-  max-height: 260px;
-
+  justify-content: space-between;  /* 🔥 key */
   padding-top: 18px;
-}
+  padding-bottom: 18px;
 
+  min-height: 360px;              /* 🔥 justera 320–420 om du vill */
+}
 
 
 /* ===============================
@@ -90,7 +86,6 @@ html, body, #root {
 
 
 /* USER bubble */
-
 .chat-message.user {
   align-self: flex-end;
   background-color: #EAF6EF;
@@ -99,11 +94,9 @@ html, body, #root {
 
 
 /* 🔥 subtle hero boost */
-
 .chat-start .chat-message{
   transform: scale(1.03);
 }
-
 
 
 /* ===============================
@@ -133,148 +126,4 @@ html, body, #root {
   padding: 0;
 }
 
-.markdown-content li {
-  margin: 2px 0;
-  line-height: 1.3;
-}
-
-.markdown-content p:empty {
-  margin: 0;
-  padding: 0;
-}
-
-
-
-/* ===============================
-   INPUT AREA
-================================= */
-
-.input-box {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-
-  padding: 10px;
-  margin-top: 10px;
-
-  background: rgba(255,255,255,0.94);
-  border-radius: 26px;
-
-  backdrop-filter: blur(10px);
-
-  box-sizing: border-box;
-
-  box-shadow:
-    0 -2px 10px rgba(0,0,0,0.03);
-}
-
-
-
-/* TEXTAREA */
-
-.input-box textarea {
-  flex: 1;
-
-  padding: 12px 16px;
-
-  border: 1px solid #d1d5db;
-  border-radius: 22px;
-
-  font-size: 15px;
-  outline: none;
-
-  background-color: #fff;
-
-  resize: none;
-  line-height: 1.45;
-  max-height: 140px;
-  overflow-y: auto;
-
-  transition: border 0.2s ease,
-              box-shadow 0.2s ease;
-}
-
-.input-box textarea:focus {
-  border: 1px solid #197d4f;
-
-  box-shadow:
-    0 0 0 3px rgba(25,125,79,0.08);
-}
-
-
-
-/* BUTTON */
-
-.input-box button,
-.send-button {
-  padding: 10px 18px;
-
-  background-color: #197d4f;
-  color: #fff;
-
-  border: none;
-  border-radius: 22px;
-
-  font-size: 15px;
-  cursor: pointer;
-
-  transition: all 0.22s ease;
-}
-
-.input-box button:hover,
-.send-button:hover {
-  background-color: #145c3a;
-  transform: translateY(-1px);
-}
-
-.input-box button:disabled {
-  background-color: #9ca3af;
-  cursor: not-allowed;
-  transform: none;
-}
-
-
-
-/* ===============================
-   MOBILE
-================================= */
-
-@media (max-width: 480px) {
-
-  .app-container {
-    padding: 10px;
-  }
-
-  .chat-window {
-    padding: 12px;
-    border-radius: 18px;
-  }
-
-  .chat-window.chat-start {
-    max-height: 220px;
-  }
-
-  .chat-message {
-    max-width: 86%;
-    font-size: 13px;
-    padding: 8px 12px;
-    border-radius: 18px;
-  }
-
-  .input-box {
-    padding: 6px;
-    gap: 6px;
-  }
-
-  .input-box textarea {
-    padding: 8px 10px;
-    font-size: 13px;
-    border-radius: 18px;
-  }
-
-  .input-box button {
-    padding: 8px 12px;
-    font-size: 13px;
-    border-radius: 18px;
-  }
-}
+.markdown-content l
