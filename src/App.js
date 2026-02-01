@@ -10,7 +10,9 @@ export default function App() {
       role: "assistant"
     }
   ]);
+
   const [input, setInput] = useState('');
+  const [isSending, setIsSending] = useState(false); // stoppar dubbelskick
 
   async function sendToAI(conversation) {
     try {
@@ -19,8 +21,10 @@ export default function App() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ messages: conversation })
       });
+
       const data = await response.json();
       return data.response;
+
     } catch (error) {
       console.error('Fel vid AI-anrop:', error);
       return 'Vego-bot slumrade till, försök igen';
@@ -28,26 +32,45 @@ export default function App() {
   }
 
   const handleSend = async () => {
-    if (!input.trim()) return;
+    if (!input.trim() || isSending) return;
 
+    setIsSending(true);
+
+    // User message
     const userMsg = {
       _id: Date.now(),
       text: input,
       role: "user"
     };
 
-    const updatedMessages = [...messages, userMsg];
-    setMessages(updatedMessages);
-    setInput('');
-
-    const botText = await sendToAI(updatedMessages);
-    const botMsg = {
-      _id: Date.now() + 1,
-      text: botText,
+    // Thinking message
+    const thinkingId = Date.now() + 1;
+    const thinkingMsg = {
+      _id: thinkingId,
+      text: "Ett ögonblick — något gott är på gång!",
       role: "assistant"
     };
 
-    setMessages((prev) => [...prev, botMsg]);
+    // Viktigt: thinking ska INTE skickas till AI
+    const conversation = [...messages, userMsg];
+
+    // Visa direkt i chatten
+    setMessages(prev => [...prev, userMsg, thinkingMsg]);
+    setInput('');
+
+    // Hämta AI-svar
+    const botText = await sendToAI(conversation);
+
+    // Ersätt thinking-raden med riktiga svaret
+    setMessages(prev =>
+      prev.map(msg =>
+        msg._id === thinkingId
+          ? { ...msg, text: botText }
+          : msg
+      )
+    );
+
+    setIsSending(false);
   };
 
   const handleSubmit = (e) => {
@@ -70,8 +93,9 @@ export default function App() {
           onChange={(e) => setInput(e.target.value)}
           placeholder="Skriv din fråga här..."
         />
-        <button type="submit">
-          Skicka
+
+        <button type="submit" disabled={isSending}>
+          {isSending ? "Tillagar..." : "Skicka"}
         </button>
       </form>
     </div>
