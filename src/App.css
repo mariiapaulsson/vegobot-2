@@ -4,12 +4,18 @@ html, body, #root {
   padding: 0;
 }
 
-/* APP CONTAINER */
+
+/* ===============================
+   APP CONTAINER
+================================= */
+
 .app-container {
   display: flex;
   flex-direction: column;
-  height: 100%;
-  overflow: hidden;
+
+  /* 🔥 SUPERviktigt — ta bort full-height känslan */
+  height: auto;
+  min-height: unset;
 
   background: transparent;
   font-family: Arial, sans-serif;
@@ -24,19 +30,22 @@ html, body, #root {
 ================================= */
 
 .chat-window {
-  flex-grow: 1;
+
+  /* 🔥 ändrat från flex-grow */
+  flex: none;
+
   overflow-y: auto;
 
-  padding: 18px 18px 12px;
+  padding: 18px 18px 14px;
 
   background: #ffffff;
   border-radius: 22px;
 
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
 
-  min-height: 0;
+  /* default när chatten har flera meddelanden */
+  justify-content: flex-end;
 
   box-shadow:
     0 12px 30px rgba(0,0,0,0.05),
@@ -44,11 +53,17 @@ html, body, #root {
 }
 
 
-/* 🔥 HERO START — när chatten bara har 1 meddelande */
-.chat-window.chat-start{
+/* ⭐ HERO START — detta löser ditt problem */
+.chat-window.chat-start {
+
   justify-content: flex-start;
-  padding-top: 32px;
+
+  /* 🔥 stoppa den från att bli gigantisk */
+  max-height: 260px;
+
+  padding-top: 18px;
 }
+
 
 
 /* ===============================
@@ -75,6 +90,7 @@ html, body, #root {
 
 
 /* USER bubble */
+
 .chat-message.user {
   align-self: flex-end;
   background-color: #EAF6EF;
@@ -82,10 +98,12 @@ html, body, #root {
 }
 
 
-/* 🔥 gör första bubblan lite mer hero */
+/* 🔥 subtle hero boost */
+
 .chat-start .chat-message{
-  transform: scale(1.04);
+  transform: scale(1.03);
 }
+
 
 
 /* ===============================
@@ -126,6 +144,7 @@ html, body, #root {
 }
 
 
+
 /* ===============================
    INPUT AREA
 ================================= */
@@ -138,17 +157,17 @@ html, body, #root {
   padding: 10px;
   margin-top: 10px;
 
-  background: rgba(255,255,255,0.92);
+  background: rgba(255,255,255,0.94);
   border-radius: 26px;
 
   backdrop-filter: blur(10px);
 
   box-sizing: border-box;
 
-  /* 🔥 detta gör att input känns som en riktig AI-footer */
   box-shadow:
     0 -2px 10px rgba(0,0,0,0.03);
 }
+
 
 
 /* TEXTAREA */
@@ -183,8 +202,79 @@ html, body, #root {
 }
 
 
+
 /* BUTTON */
 
 .input-box button,
 .send-button {
-  padding: 10px 1
+  padding: 10px 18px;
+
+  background-color: #197d4f;
+  color: #fff;
+
+  border: none;
+  border-radius: 22px;
+
+  font-size: 15px;
+  cursor: pointer;
+
+  transition: all 0.22s ease;
+}
+
+.input-box button:hover,
+.send-button:hover {
+  background-color: #145c3a;
+  transform: translateY(-1px);
+}
+
+.input-box button:disabled {
+  background-color: #9ca3af;
+  cursor: not-allowed;
+  transform: none;
+}
+
+
+
+/* ===============================
+   MOBILE
+================================= */
+
+@media (max-width: 480px) {
+
+  .app-container {
+    padding: 10px;
+  }
+
+  .chat-window {
+    padding: 12px;
+    border-radius: 18px;
+  }
+
+  .chat-window.chat-start {
+    max-height: 220px;
+  }
+
+  .chat-message {
+    max-width: 86%;
+    font-size: 13px;
+    padding: 8px 12px;
+    border-radius: 18px;
+  }
+
+  .input-box {
+    padding: 6px;
+    gap: 6px;
+  }
+
+  .input-box textarea {
+    padding: 8px 10px;
+    font-size: 13px;
+    border-radius: 18px;
+  }
+
+  .input-box button {
+    padding: 8px 12px;
+    font-size: 13px;
+    border-radius: 18px;
+  }
+}
