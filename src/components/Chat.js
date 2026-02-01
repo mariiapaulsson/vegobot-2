@@ -6,16 +6,22 @@ export default function Chat({ messages = [] }) {
   const prevLength = useRef(0);
 
   useEffect(() => {
-    if (!chatContainerRef.current) return;
+    const el = chatContainerRef.current;
+    if (!el) return;
 
-    // Scrolla bara om AI har svarat
+    // Kör bara när ett nytt meddelande lagts till
     if (messages.length > prevLength.current) {
       const last = messages[messages.length - 1];
+
+      // Scrolla när sista meddelandet är assistant
+      // (då scrollar vi när "Ett ögonblick..." dyker upp och när svaret kommer)
       if (last && last.role === 'assistant') {
-        // Snabb men diskret, ingen browser-scroll
-        chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+        requestAnimationFrame(() => {
+          el.scrollTop = el.scrollHeight;
+        });
       }
     }
+
     prevLength.current = messages.length;
   }, [messages]);
 
@@ -27,3 +33,4 @@ export default function Chat({ messages = [] }) {
     </div>
   );
 }
+
