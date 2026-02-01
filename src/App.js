@@ -3,7 +3,6 @@ import Chat from './components/Chat';
 import './App.css';
 
 export default function App() {
-
   const [messages, setMessages] = useState([
     {
       _id: 1,
@@ -17,11 +16,8 @@ export default function App() {
 
   const inputRef = useRef(null);
 
-  // Fokus tillbaka efter AI svar
   useEffect(() => {
-    if (!isSending && inputRef.current) {
-      inputRef.current.focus();
-    }
+    if (!isSending && inputRef.current) inputRef.current.focus();
   }, [isSending]);
 
   async function sendToAI(conversation) {
@@ -31,10 +27,8 @@ export default function App() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ messages: conversation })
       });
-
       const data = await response.json();
       return data.response;
-
     } catch (error) {
       console.error('Fel vid AI-anrop:', error);
       return 'Vego-bot slumrade till, försök igen';
@@ -49,36 +43,24 @@ export default function App() {
 
     const now = Date.now();
 
-    const userMsg = {
-      _id: now,
-      text: trimmed,
-      role: "user"
-    };
+    const userMsg = { _id: now, text: trimmed, role: "user" };
 
     const thinkingId = now + 1;
-
     const thinkingMsg = {
       _id: thinkingId,
       text: "Ett ögonblick — något gott är på gång!",
       role: "assistant"
     };
 
-    // Viktigt: skicka inte thinking till AI
     const conversation = [...messages, userMsg];
 
-    // Visa direkt i chatten
     setMessages(prev => [...prev, userMsg, thinkingMsg]);
     setInput('');
 
     const botText = await sendToAI(conversation);
 
-    // Byt ut thinking-raden
     setMessages(prev =>
-      prev.map(msg =>
-        msg._id === thinkingId
-          ? { ...msg, text: botText }
-          : msg
-      )
+      prev.map(m => (m._id === thinkingId ? { ...m, text: botText } : m))
     );
 
     setIsSending(false);
@@ -89,7 +71,6 @@ export default function App() {
     handleSend();
   };
 
-  // Enter skickar, Shift+Enter = ny rad
   const handleKeyDown = (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
@@ -97,30 +78,32 @@ export default function App() {
     }
   };
 
+  const isStart = messages.length <= 1;
+
   return (
     <div className="app-container">
-      <Chat messages={messages} />
+      <div className={`chat-card ${isStart ? 'chat-start' : ''}`}>
+        <Chat messages={messages} />
 
-      <form onSubmit={handleSubmit} className="input-box">
+        <form onSubmit={handleSubmit} className="input-box">
+          <textarea
+            ref={inputRef}
+            rows={1}
+            inputMode="text"
+            autoComplete="off"
+            autoCorrect="off"
+            spellCheck="false"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={handleKeyDown}
+            placeholder="Skriv din fråga här..."
+          />
 
-        <textarea
-          ref={inputRef}
-          rows={1}
-          inputMode="text"
-          autoComplete="off"
-          autoCorrect="off"
-          spellCheck="false"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          onKeyDown={handleKeyDown}
-          placeholder="Skriv din fråga här..."
-        />
-
-        <button type="submit" disabled={isSending}>
-          {isSending ? "Tillagar..." : "Skicka"}
-        </button>
-
-      </form>
+          <button type="submit" disabled={isSending}>
+            {isSending ? "Tillagar..." : "Skicka"}
+          </button>
+        </form>
+      </div>
     </div>
   );
 }
